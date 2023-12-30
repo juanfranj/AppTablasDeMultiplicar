@@ -1,0 +1,29 @@
+<resources>
+    //Presentacion
+    <string name="app_name">Tablas de Multiplicar</string>
+    <string name="verTablas">Ver Tablas</string>
+    <string name="estudiarTablas">Estudiar Tablas</string>
+    <string name="repasarTablas">Repasar Tablas</string>
+
+    //VerTablas
+    <string name="ver_name">Ver Tablas</string>
+    <string name="boton_name">Tabla</string>
+
+    //VerTablasSeleccion
+    <string name="ver_tabla_seleccion">Tabla del </string>
+    <string name="ver_resultado">Mostrar Resultado </string>
+    <string name="ocultar_resultado">Ocultar Resultado </string>
+
+    //EstudiarTablas
+    <string name="estudiar_name">Estudiar Tablas </string>
+    <string name="selecionar_estudiar">Selecciona la tabla que quieras Estudiar </string>
+
+    //EstudiarTablasSeleccion
+    <string name="selecionar_calcular">Calcular</string>
+
+
+
+
+
+
+</resources>
