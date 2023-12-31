@@ -1,48 +1,41 @@
 package com.estudiartablas.tablasmultiplicar.estudiartablasseleccion.model
 
-
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.estudiartablas.tablasmultiplicar.estudiartablasseleccion.ui.EstudiarTablasSeleccionViewModel
 import com.estudiartablas.tablasmultiplicar.ui.theme.Boton
 import com.estudiartablas.tablasmultiplicar.ui.theme.cardPresentation
 
-class BotonRespuestas(val tabla: Int) {
+class BotonResultado() {
 
     @Composable
-    fun CrearBoton(
-        modifier: Modifier,
-        result: Int,
-        estudiarTablasViewModel: EstudiarTablasSeleccionViewModel
-    ) {
-        val size = if(result>=100) 22.sp else 24.sp
+    fun CrearBoton(estudiarTablasSeleccionViewModel: EstudiarTablasSeleccionViewModel, index:Int){
+        val activado: Boolean = estudiarTablasSeleccionViewModel.activate[index]
         Button(
-            onClick = { estudiarTablasViewModel.modificarActivado((0..9).random())}, shape = MaterialTheme.shapes.small,
+            modifier = Modifier.height(36.dp),
+            onClick = { /*TODO*/ },
+            //border = BorderStroke(2.dp, Color.Black),
+            shape = MaterialTheme.shapes.small,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Boton,
                 contentColor = Color.White,
                 disabledContentColor = cardPresentation
-            ), modifier = modifier
-                .padding(2.dp),
-            contentPadding = PaddingValues(4.dp)
-
+            ),
+            enabled = activado
         ) {
-
-            Text(
-                text = "${result}",
-                fontSize = size,
-                fontWeight = FontWeight.Bold,
-                )
         }
     }
+
+
 }

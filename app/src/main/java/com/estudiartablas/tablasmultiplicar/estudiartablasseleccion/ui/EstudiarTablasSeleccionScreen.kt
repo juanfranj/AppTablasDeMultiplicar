@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.estudiartablas.tablasmultiplicar.R
 import com.estudiartablas.tablasmultiplicar.estudiartablasseleccion.model.BotonRespuestas
+import com.estudiartablas.tablasmultiplicar.estudiartablasseleccion.model.BotonResultado
 import com.estudiartablas.tablasmultiplicar.ui.theme.Boton
 import com.estudiartablas.tablasmultiplicar.ui.theme.Fondo
 import com.estudiartablas.tablasmultiplicar.ui.theme.cardPresentation
@@ -63,26 +64,34 @@ fun EstudiarTablasSeleccionScreen(
                 tabla,
                 estudiarTablasViewModel
             )
-            FooterEstudiar(tabla)
+            FooterEstudiar(tabla, estudiarTablasViewModel)
 
         }
     }
 }
 
 @Composable
-fun FooterEstudiar(tabla: Int) {
-    val myResult:List<Int> = (1..10).map{it*tabla}.shuffled()
+fun FooterEstudiar(tabla: Int, estudiarTablasViewModel: EstudiarTablasSeleccionViewModel) {
+    val myResult: List<Int> = (1..10).map { it * tabla }.shuffled()
 
     Row(modifier = Modifier.padding(8.dp)) {
         Column(Modifier.weight(0.7f)) {
             Row {
-                (0..4).forEach {indice ->
-                    BotonRespuestas(tabla).CrearBoton(Modifier.weight(0.2f),myResult[indice])
+                (0..4).forEach { indice ->
+                    BotonRespuestas(tabla).CrearBoton(
+                        Modifier.weight(0.2f),
+                        myResult[indice],
+                        estudiarTablasViewModel
+                    )
                 }
             }
             Row {
-                (5..9).forEach {indice->
-                    BotonRespuestas(tabla).CrearBoton(Modifier.weight(0.2f), myResult[indice])
+                (5..9).forEach { indice ->
+                    BotonRespuestas(tabla).CrearBoton(
+                        Modifier.weight(0.2f),
+                        myResult[indice],
+                        estudiarTablasViewModel
+                    )
                 }
 
             }
@@ -119,6 +128,7 @@ fun BodyEstudiar(
     estudiarTablasViewModel: EstudiarTablasSeleccionViewModel
 ) {
     val index: List<Int> = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    val listResultado: List<BotonResultado> = estudiarTablasViewModel.myRespuestas
 
     Card(
         modifier = Modifier
@@ -135,11 +145,19 @@ fun BodyEstudiar(
             modifier = Modifier.padding(8.dp),
             content = {
                 items(index) { ind ->
-                    ItemRow(index = ind, modifier, tabla)
+                    estudiarTablasViewModel.addButtom()
+                    ItemRow(index = ind, modifier, tabla, listResultado, estudiarTablasViewModel)
                 }
 
             })
+//        estudiarTablasViewModel.activate.forEach {
+//            Log.i("juanfran", it.toString() )
+//        }
+
+
+        //estudiarTablasViewModel.modificarActivado(0)
     }
+
 }
 
 @Composable
@@ -180,8 +198,15 @@ fun HeadEstudiar(modifier: Modifier, num: Int, navigationController: NavHostCont
 
 
 @Composable
-fun ItemRow(index: Int, modifier: Modifier, num: Int) {
+fun ItemRow(
+    index: Int,
+    modifier: Modifier,
+    num: Int,
+    botonResultado: List<BotonResultado>,
+    estudiarTablasViewModel: EstudiarTablasSeleccionViewModel
+) {
     //val num: Int = 6
+
     Row() {
 
         Box(
@@ -213,23 +238,11 @@ fun ItemRow(index: Int, modifier: Modifier, num: Int) {
                 .weight(.2f)
 
         ) {
-            Button(
-                modifier = Modifier.height(36.dp),
-                onClick = { /*TODO*/ },
-                border = BorderStroke(2.dp, Color.Black),
-                shape = MaterialTheme.shapes.small,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Boton,
-                    contentColor = Color.White,
-                    disabledContentColor = cardPresentation
-                ),
-                enabled = true
-            ) {
-            }
+//
+            botonResultado[index - 1].CrearBoton(estudiarTablasViewModel, index - 1)
 
         }
         Spacer(modifier = Modifier.weight(0.1f))
-
 
     }
 }
