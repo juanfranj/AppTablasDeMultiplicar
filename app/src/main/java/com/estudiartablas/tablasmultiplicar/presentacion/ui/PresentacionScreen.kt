@@ -1,6 +1,7 @@
 package com.estudiartablas.tablasmultiplicar.presentacion.ui
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import androidx.navigation.NavHostController
 import com.estudiartablas.tablasmultiplicar.R
 import com.estudiartablas.tablasmultiplicar.model.Routes
 import com.estudiartablas.tablasmultiplicar.ui.theme.Boton
+import com.estudiartablas.tablasmultiplicar.ui.theme.Fondo
 import com.estudiartablas.tablasmultiplicar.ui.theme.TituloCard
 import com.estudiartablas.tablasmultiplicar.ui.theme.cardPresentation
 
@@ -41,7 +43,8 @@ fun PresentacionScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 35.dp, bottom = 35.dp, start = 8.dp, end = 8.dp),
+            .padding(top = 35.dp, bottom = 35.dp, start = 8.dp, end = 8.dp)
+            .background(Fondo),
         verticalArrangement = Arrangement.Top
     ) {
         Head(Modifier.align(Alignment.CenterHorizontally))
@@ -76,7 +79,6 @@ fun Head(modifier: Modifier) {
 }
 
 
-
 @Composable
 fun Body(navigationController: NavHostController) {
 
@@ -92,7 +94,7 @@ fun Body(navigationController: NavHostController) {
         Spacer(modifier = Modifier.size(16.dp))
 
         Button(
-            onClick = { navigationController.navigate(Routes.VerTablas.route)},
+            onClick = { navigationController.navigate(Routes.VerTablas.route) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
@@ -103,7 +105,11 @@ fun Body(navigationController: NavHostController) {
             ),
             shape = MaterialTheme.shapes.small
         ) {
-            Text(text = stringResource(R.string.verTablas), fontSize = 24.sp, fontWeight = FontWeight.ExtraBold)
+            Text(
+                text = stringResource(R.string.verTablas),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.ExtraBold
+            )
         }
         Spacer(modifier = Modifier.size(16.dp))
         Button(
@@ -118,7 +124,11 @@ fun Body(navigationController: NavHostController) {
             ),
             shape = MaterialTheme.shapes.small
         ) {
-            Text(text = stringResource(R.string.estudiarTablas), fontSize = 24.sp, fontWeight = FontWeight.ExtraBold)
+            Text(
+                text = stringResource(R.string.estudiarTablas),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.ExtraBold
+            )
         }
         Spacer(modifier = Modifier.size(16.dp))
         Button(
@@ -133,7 +143,11 @@ fun Body(navigationController: NavHostController) {
             ),
             shape = MaterialTheme.shapes.small
         ) {
-            Text(text = stringResource(R.string.repasarTablas), fontSize = 24.sp, fontWeight = FontWeight.ExtraBold)
+            Text(
+                text = stringResource(R.string.repasarTablas),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.ExtraBold
+            )
         }
         Spacer(modifier = Modifier.size(16.dp))
 
