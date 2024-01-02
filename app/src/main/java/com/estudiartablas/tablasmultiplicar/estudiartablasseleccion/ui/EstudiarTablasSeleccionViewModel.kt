@@ -80,7 +80,7 @@ open class EstudiarTablasSeleccionViewModel @Inject constructor() : ViewModel() 
             }
             modificarActivado(indiceSiguiente())
         }
-        if (cont == 3){
+        if (cont == 10){
             _showDialog.value = true
         }
     }
@@ -91,6 +91,14 @@ open class EstudiarTablasSeleccionViewModel @Inject constructor() : ViewModel() 
         iniciarTabla()
     }
 
+    fun incrementaIndice(inc:Int){
+        val index = _activate.indexOf(true) + inc
+        when(index){
+            -1 -> modificarActivado(9)
+            in 0..9 -> modificarActivado(index)
+            10 -> modificarActivado(0)
+        }
+    }
 
 }
 

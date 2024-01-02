@@ -43,6 +43,7 @@ import com.estudiartablas.tablasmultiplicar.R
 import com.estudiartablas.tablasmultiplicar.model.Routes
 import com.estudiartablas.tablasmultiplicar.ui.theme.Boton
 import com.estudiartablas.tablasmultiplicar.ui.theme.Fondo
+import com.estudiartablas.tablasmultiplicar.ui.theme.TituloCard
 import com.estudiartablas.tablasmultiplicar.ui.theme.cardPresentation
 
 
@@ -113,7 +114,7 @@ fun HeadVer(modifier: Modifier, navigationController: NavHostController) {
             .fillMaxWidth()
             .padding(vertical = 24.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.LightGray,
+            containerColor = TituloCard,
             contentColor = Color.White
         ),
         border = BorderStroke(1.dp, Color.LightGray)
@@ -135,7 +136,7 @@ fun HeadVer(modifier: Modifier, navigationController: NavHostController) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "volver",
-                    modifier = Modifier.fillMaxHeight()
+                    modifier = Modifier.fillMaxSize()
                 )
             }
         }
@@ -188,7 +189,7 @@ fun EndVerTablas() {
         modifier = Modifier
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = Color.LightGray,
+            containerColor = TituloCard,
             contentColor = Color.White
         ),
         border = BorderStroke(1.dp, Color.LightGray)

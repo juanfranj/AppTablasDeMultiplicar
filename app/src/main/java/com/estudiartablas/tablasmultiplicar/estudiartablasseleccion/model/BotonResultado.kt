@@ -21,6 +21,7 @@ import androidx.lifecycle.MutableLiveData
 import com.estudiartablas.tablasmultiplicar.estudiartablasseleccion.ui.EstudiarTablasSeleccionViewModel
 import com.estudiartablas.tablasmultiplicar.ui.theme.Boton
 import com.estudiartablas.tablasmultiplicar.ui.theme.Fondo
+import com.estudiartablas.tablasmultiplicar.ui.theme.SeleccionarResultado
 import com.estudiartablas.tablasmultiplicar.ui.theme.cardPresentation
 import com.estudiartablas.tablasmultiplicar.ui.theme.disabledBoton
 
@@ -38,7 +39,7 @@ class BotonResultado() {
             //border = BorderStroke(2.dp, Color.Black),
             shape = MaterialTheme.shapes.small,
             colors = ButtonDefaults.buttonColors(
-                containerColor = disabledBoton,
+                containerColor = SeleccionarResultado,
                 contentColor = Color.White,
                 disabledContentColor = Color.Gray,
                 disabledContainerColor = cardPresentation

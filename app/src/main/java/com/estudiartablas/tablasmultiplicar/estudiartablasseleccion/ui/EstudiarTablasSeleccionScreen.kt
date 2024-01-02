@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -45,7 +46,10 @@ import com.estudiartablas.tablasmultiplicar.R
 import com.estudiartablas.tablasmultiplicar.estudiartablasseleccion.model.BotonRespuestas
 import com.estudiartablas.tablasmultiplicar.estudiartablasseleccion.model.BotonResultado
 import com.estudiartablas.tablasmultiplicar.ui.theme.Boton
+import com.estudiartablas.tablasmultiplicar.ui.theme.BotonSeleccionar
 import com.estudiartablas.tablasmultiplicar.ui.theme.Fondo
+import com.estudiartablas.tablasmultiplicar.ui.theme.SeleccionarResultado
+import com.estudiartablas.tablasmultiplicar.ui.theme.TituloCard
 import com.estudiartablas.tablasmultiplicar.ui.theme.cardPresentation
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -78,7 +82,11 @@ fun EstudiarTablasSeleccionScreen(
                 estudiarTablasViewModel
             )
             FooterEstudiar(tabla, estudiarTablasViewModel)
-            ResultDialog(show = showResult) { estudiarTablasViewModel.offResultDialog(navigationController) }
+            ResultDialog(show = showResult) {
+                estudiarTablasViewModel.offResultDialog(
+                    navigationController
+                )
+            }
 
         }
     }
@@ -120,28 +128,74 @@ fun FooterEstudiar(
             }
 
         }
-        Button(
-            onClick = { estudiarTablasViewModel.comprobarResultado(tabla) },
-            shape = MaterialTheme.shapes.small,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Boton,
-                contentColor = Color.White,
-                disabledContentColor = cardPresentation
-            ),
-            modifier = Modifier
-                .padding(2.dp)
-                .weight(0.3f)
-                .fillMaxWidth()
-                .height(100.dp),
-            contentPadding = PaddingValues(8.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.selecionar_calcular),
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-            )
+        Column(Modifier.weight(0.3f)) {
+            Row() {
+                Button(
+                    onClick = { estudiarTablasViewModel.comprobarResultado(tabla) },
+                    shape = MaterialTheme.shapes.small,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Boton,
+                        contentColor = Color.White,
+                        disabledContentColor = cardPresentation
+                    ),
+                    modifier = Modifier
+                        .padding(2.dp)
+                        .fillMaxWidth(),
+                    contentPadding = PaddingValues(8.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.selecionar_calcular),
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                    )
 
+                }
+            }
+            Row() {
+                Card(
+                    modifier = Modifier
+                        .padding(2.dp)
+                        .weight(0.5f), colors = CardDefaults.cardColors(
+                        containerColor = BotonSeleccionar,
+                        contentColor = Color.White
+                    )
+                ) {
+                    IconButton(
+                        onClick = {
+                            estudiarTablasViewModel.incrementaIndice(-1)
+                        }, modifier = Modifier.align(Alignment.CenterHorizontally)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "volver",
+                            modifier = Modifier.fillMaxHeight()
+                        )
+                    }
+                }
+                Card(
+                    modifier = Modifier
+                        .padding(2.dp)
+                        .weight(0.5f), colors = CardDefaults.cardColors(
+                        containerColor = BotonSeleccionar,
+                        contentColor = Color.White
+                    )
+                ) {
+                    IconButton(
+                        onClick = {
+                            estudiarTablasViewModel.incrementaIndice(1)
+                        }, modifier = Modifier.align(Alignment.CenterHorizontally)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowForward,
+                            contentDescription = "adelantar",
+                            modifier = Modifier.fillMaxHeight()
+                        )
+                    }
+                }
+
+            }
         }
+
     }
 }
 
@@ -177,6 +231,7 @@ fun BodyEstudiar(
             })
     }
 
+
 }
 
 @Composable
@@ -190,7 +245,7 @@ fun HeadEstudiar(
     Card(
         modifier = Modifier.padding(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.LightGray,
+            containerColor = TituloCard,
             contentColor = Color.White
         ),
         border = BorderStroke(1.dp, Color.LightGray)
@@ -215,7 +270,7 @@ fun HeadEstudiar(
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "volver",
-                    modifier = Modifier.fillMaxHeight()
+                    modifier = Modifier.fillMaxSize()
                 )
             }
         }
@@ -287,10 +342,10 @@ fun ResultDialog(show: Boolean, onDismiss: () -> Unit) {
                     .fillMaxWidth()
                     .padding(vertical = 16.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = Color.LightGray,
+                    containerColor = TituloCard,
                     contentColor = Color.White
                 ),
-                border = BorderStroke(1.dp, Color.LightGray)
+                //border = BorderStroke(1.dp, Color.LightGray)
             ) {
                 Column(
                     Modifier
@@ -303,12 +358,21 @@ fun ResultDialog(show: Boolean, onDismiss: () -> Unit) {
                         fontSize = 28.sp
                     )
                     Button(
-                        onClick = { onDismiss() }, modifier = Modifier
+                        onClick = { onDismiss() },
+                        modifier = Modifier
                             .fillMaxWidth()
                             .padding(24.dp),
                         shape = MaterialTheme.shapes.small,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = BotonSeleccionar ,
+                            contentColor = Color.White,
+                        ),
                     ) {
-                        Text(text = stringResource(id = R.string.boton_dialogo), fontSize = 28.sp, fontWeight = FontWeight.Bold)
+                        Text(
+                            text = stringResource(id = R.string.boton_dialogo),
+                            fontSize = 28.sp,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
             }
