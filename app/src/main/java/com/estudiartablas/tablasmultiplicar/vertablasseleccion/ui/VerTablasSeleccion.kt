@@ -27,9 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -62,9 +59,14 @@ fun VerTablasSeleccionScreen(
             HeadVer(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 navigationController = navigationController,
-                tabla = tabla
+                tabla = tabla,
+                verTablasSeleccionViewModel
             )
-            crearTabla(tabla, Modifier.align(Alignment.CenterHorizontally), verTablasSeleccionViewModel)
+            crearTabla(
+                tabla,
+                Modifier.align(Alignment.CenterHorizontally),
+                verTablasSeleccionViewModel
+            )
 
         }
 
@@ -78,8 +80,12 @@ fun crearTabla(
     verTablasSeleccionViewModel: VerTablasSeleccionViewModel
 ) {
     val showResult: Boolean by verTablasSeleccionViewModel.showResult.observeAsState(initial = false)
-    val result:String by verTablasSeleccionViewModel.result.observeAsState(initial = "")
-    val textButtom:String by verTablasSeleccionViewModel.textButton.observeAsState(initial = stringResource(R.string.ver_resultado))
+    val result: String by verTablasSeleccionViewModel.result.observeAsState(initial = "")
+    val textButtom: String by verTablasSeleccionViewModel.textButton.observeAsState(
+        initial = stringResource(
+            R.string.ver_resultado
+        )
+    )
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -125,16 +131,16 @@ fun crearTabla(
                     )
                 }
 
-                if(showResult) {
+                if (showResult) {
                     verTablasSeleccionViewModel.onResult("${tabla * num}")
                     verTablasSeleccionViewModel.onButtonResult(stringResource(R.string.ocultar_resultado))
                 } else {
                     verTablasSeleccionViewModel.onResult("")
                     verTablasSeleccionViewModel.onButtonResult(stringResource(R.string.ver_resultado))
                 }
-                Box (Modifier.weight(.2f)){
+                Box(Modifier.weight(.2f)) {
                     Text(
-                        text = result ,
+                        text = result,
                         modifier = modifier.padding(vertical = 2.dp),
                         fontSize = 28.sp,
                         fontWeight = FontWeight.Bold
@@ -162,7 +168,12 @@ fun crearTabla(
 }
 
 @Composable
-fun HeadVer(modifier: Modifier, navigationController: NavHostController, tabla: Int) {
+fun HeadVer(
+    modifier: Modifier,
+    navigationController: NavHostController,
+    tabla: Int,
+    verTablasSeleccionViewModel: VerTablasSeleccionViewModel
+) {
 
     Card(
         modifier = Modifier
@@ -185,7 +196,11 @@ fun HeadVer(modifier: Modifier, navigationController: NavHostController, tabla: 
 
             )
             IconButton(
-                onClick = { navigationController.popBackStack() },
+                onClick = {
+                    verTablasSeleccionViewModel.onResult("")
+                    navigationController.popBackStack()
+                    verTablasSeleccionViewModel.onShowResult(true)
+                },
                 modifier.padding(end = 8.dp)
             ) {
                 Icon(

@@ -13,5 +13,6 @@ val Pink40 = Color(0xFF7D5260)
 //Colores personalizados
 val Fondo = Color(0xFFD3F0CD)
 val Boton = Color(0xFFF7A7A5)
+val disabledBoton = Color(0xFF89E68D)
 val cardPresentation = Color(0xFFF0EFB0)
 //val cardPresentation = Color.LightGray

@@ -17,17 +17,23 @@ import com.estudiartablas.tablasmultiplicar.estudiartablasseleccion.ui.EstudiarT
 import com.estudiartablas.tablasmultiplicar.ui.theme.Boton
 import com.estudiartablas.tablasmultiplicar.ui.theme.cardPresentation
 
-class BotonRespuestas(val tabla: Int) {
+class BotonRespuestas(val tabla:Int) {
+
+    private val aux: List<Int> = (1..10).shuffled()
+    private val myResult: List<Int> = aux.map { it * tabla }
 
     @Composable
     fun CrearBoton(
         modifier: Modifier,
         result: Int,
-        estudiarTablasViewModel: EstudiarTablasSeleccionViewModel
+        estudiarTablasViewModel: EstudiarTablasSeleccionViewModel,
+        indice: Int
     ) {
+
+
         val size = if(result>=100) 22.sp else 24.sp
         Button(
-            onClick = { estudiarTablasViewModel.modificarActivado((0..9).random())}, shape = MaterialTheme.shapes.small,
+            onClick = { estudiarTablasViewModel.actualizarResultado(result)}, shape = MaterialTheme.shapes.small,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Boton,
                 contentColor = Color.White,

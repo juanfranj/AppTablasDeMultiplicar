@@ -28,13 +28,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
 import com.estudiartablas.tablasmultiplicar.R
 import com.estudiartablas.tablasmultiplicar.estudiartablasseleccion.model.BotonRespuestas
@@ -52,27 +57,43 @@ fun EstudiarTablasSeleccionScreen(
 ) {
     Scaffold() {
         it
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Fondo),
             verticalArrangement = Arrangement.Top,
         ) {
-            HeadEstudiar(Modifier.align(Alignment.CenterHorizontally), tabla, navigationController)
+            val showResult: Boolean by estudiarTablasViewModel.showDialog.observeAsState(initial = false)
+
+            HeadEstudiar(
+                Modifier.align(Alignment.CenterHorizontally),
+                tabla,
+                navigationController,
+                estudiarTablasViewModel
+            )
             BodyEstudiar(
                 Modifier.align(Alignment.CenterHorizontally),
                 tabla,
                 estudiarTablasViewModel
             )
             FooterEstudiar(tabla, estudiarTablasViewModel)
+            ResultDialog(show = showResult) { estudiarTablasViewModel.offResultDialog(navigationController) }
 
         }
     }
 }
 
 @Composable
-fun FooterEstudiar(tabla: Int, estudiarTablasViewModel: EstudiarTablasSeleccionViewModel) {
-    val myResult: List<Int> = (1..10).map { it * tabla }.shuffled()
+fun FooterEstudiar(
+    tabla: Int,
+    estudiarTablasViewModel: EstudiarTablasSeleccionViewModel,
+
+    ) {
+    val aux: List<Int> = (1..10).shuffled()
+    val myResult: List<Int> = (1..10).map { it * tabla }
+
+
 
     Row(modifier = Modifier.padding(8.dp)) {
         Column(Modifier.weight(0.7f)) {
@@ -81,7 +102,8 @@ fun FooterEstudiar(tabla: Int, estudiarTablasViewModel: EstudiarTablasSeleccionV
                     BotonRespuestas(tabla).CrearBoton(
                         Modifier.weight(0.2f),
                         myResult[indice],
-                        estudiarTablasViewModel
+                        estudiarTablasViewModel,
+                        indice
                     )
                 }
             }
@@ -90,7 +112,8 @@ fun FooterEstudiar(tabla: Int, estudiarTablasViewModel: EstudiarTablasSeleccionV
                     BotonRespuestas(tabla).CrearBoton(
                         Modifier.weight(0.2f),
                         myResult[indice],
-                        estudiarTablasViewModel
+                        estudiarTablasViewModel,
+                        indice
                     )
                 }
 
@@ -98,12 +121,14 @@ fun FooterEstudiar(tabla: Int, estudiarTablasViewModel: EstudiarTablasSeleccionV
 
         }
         Button(
-            onClick = { /*TODO*/ }, shape = MaterialTheme.shapes.small,
+            onClick = { estudiarTablasViewModel.comprobarResultado(tabla) },
+            shape = MaterialTheme.shapes.small,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Boton,
                 contentColor = Color.White,
                 disabledContentColor = cardPresentation
-            ), modifier = Modifier
+            ),
+            modifier = Modifier
                 .padding(2.dp)
                 .weight(0.3f)
                 .fillMaxWidth()
@@ -145,23 +170,22 @@ fun BodyEstudiar(
             modifier = Modifier.padding(8.dp),
             content = {
                 items(index) { ind ->
-                    estudiarTablasViewModel.addButtom()
+                    estudiarTablasViewModel.addButtom(ind)
                     ItemRow(index = ind, modifier, tabla, listResultado, estudiarTablasViewModel)
                 }
 
             })
-//        estudiarTablasViewModel.activate.forEach {
-//            Log.i("juanfran", it.toString() )
-//        }
-
-
-        //estudiarTablasViewModel.modificarActivado(0)
     }
 
 }
 
 @Composable
-fun HeadEstudiar(modifier: Modifier, num: Int, navigationController: NavHostController) {
+fun HeadEstudiar(
+    modifier: Modifier,
+    num: Int,
+    navigationController: NavHostController,
+    estudiarTablasViewModel: EstudiarTablasSeleccionViewModel
+) {
     //val num: Int = 6
     Card(
         modifier = Modifier.padding(16.dp),
@@ -182,7 +206,10 @@ fun HeadEstudiar(modifier: Modifier, num: Int, navigationController: NavHostCont
 
             )
             IconButton(
-                onClick = { navigationController.popBackStack() },
+                onClick = {
+                    navigationController.popBackStack()
+                    estudiarTablasViewModel.iniciarTabla()
+                },
                 modifier.padding(end = 8.dp)
             ) {
                 Icon(
@@ -208,6 +235,7 @@ fun ItemRow(
     //val num: Int = 6
 
     Row() {
+        Spacer(modifier = Modifier.weight(0.1f))
 
         Box(
             Modifier
@@ -247,4 +275,45 @@ fun ItemRow(
     }
 }
 
+@Composable
+fun ResultDialog(show: Boolean, onDismiss: () -> Unit) {
+    if (show) {
+        Dialog(
+            onDismissRequest = { onDismiss() },
+            properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)
+        ) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.LightGray,
+                    contentColor = Color.White
+                ),
+                border = BorderStroke(1.dp, Color.LightGray)
+            ) {
+                Column(
+                    Modifier
+                        .padding(24.dp)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.texto_dialogo),
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        fontSize = 28.sp
+                    )
+                    Button(
+                        onClick = { onDismiss() }, modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(24.dp),
+                        shape = MaterialTheme.shapes.small,
+                    ) {
+                        Text(text = stringResource(id = R.string.boton_dialogo), fontSize = 28.sp, fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
+
+        }
+    }
+}
 
